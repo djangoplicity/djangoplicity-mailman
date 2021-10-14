@@ -1,6 +1,6 @@
 from setuptools import setup
 
-setup(name = 'django-mailman',
+setup(name = 'djangoplicity-mailman',
     version = '0.4.1',
     packages = ['django_mailman',],
     platforms = ['any'],
@@ -10,5 +10,5 @@ setup(name = 'django-mailman',
     description = 'Interface to Mailman Web-API',
     long_description = open('README.rst').read(),
     url = 'https://github.com/djangoplicity/djangoplicity-mailman',
-    download_url = ''
+    download_url = 'https://github.com/djangoplicity/djangoplicity-mailman/archive/refs/tags/0.4.1.tar.gz'
 )
