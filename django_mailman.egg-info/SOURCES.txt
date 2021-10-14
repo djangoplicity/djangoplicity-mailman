@@ -1,0 +1,11 @@
+README.rst
+setup.py
+django_mailman/__init__.py
+django_mailman/models.py
+django_mailman/tests.py
+django_mailman/views.py
+django_mailman/webcall.py
+django_mailman.egg-info/PKG-INFO
+django_mailman.egg-info/SOURCES.txt
+django_mailman.egg-info/dependency_links.txt
+django_mailman.egg-info/top_level.txt
