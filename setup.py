@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name = 'djangoplicity-mailman',
-    version = '0.4.2',
+    version = '0.5.0',
     packages = ['django_mailman',],
     platforms = ['any'],
     license = 'GNU LGPL v2.1',
@@ -10,5 +10,4 @@ setup(name = 'djangoplicity-mailman',
     description = 'Interface to Mailman Web-API',
     long_description = open('README.rst').read(),
     url = 'https://github.com/djangoplicity/djangoplicity-mailman',
-    download_url = 'https://github.com/djangoplicity/djangoplicity-mailman/archive/refs/tags/0.4.2.tar.gz'
 )

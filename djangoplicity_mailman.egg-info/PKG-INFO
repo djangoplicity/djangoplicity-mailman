@@ -1,9 +1,8 @@
 Metadata-Version: 2.1
 Name: djangoplicity-mailman
-Version: 0.4.2
+Version: 0.5.0
 Summary: Interface to Mailman Web-API
 Home-page: https://github.com/djangoplicity/djangoplicity-mailman
-Download-URL: https://github.com/djangoplicity/djangoplicity-mailman/archive/refs/tags/0.4.2.tar.gz
 Author: Bernd Schlapsi
 Author-email: albert@albertoconnor.ca
 License: GNU LGPL v2.1
