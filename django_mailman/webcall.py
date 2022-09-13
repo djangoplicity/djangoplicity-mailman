@@ -43,9 +43,9 @@ Updates:
     add Parameter force_multipart
 """
 import urllib.request, urllib.parse, urllib.error
-import mimetools, mimetypes
+import mimetypes
+import email.generator
 import os, stat
-from types import UnicodeType
 
 # Controls how sequences are uncoded. If true, elements may be given multiple values by
 #  assigning a sequence.
@@ -89,7 +89,7 @@ class MultipartPostHandler(urllib.request.BaseHandler):
 
     def multipart_encode(self, vars, files, boundary = None, buffer = None):
         if boundary is None:
-            boundary = mimetools.choose_boundary()
+            boundary = email.generator._make_boundary() # See: https://stackoverflow.com/questions/27099290/where-is-mimetools-choose-boundary-function-in-python3
             boundary_str = '--%s\r\n' % boundary
         if buffer is None:
             buffer = ''

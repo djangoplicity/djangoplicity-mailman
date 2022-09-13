@@ -2,12 +2,11 @@
 import re
 import urllib.request, urllib.error, urllib.parse
 import logging
-from types import UnicodeType
 
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
-from webcall import MultipartPostHandler
+from .webcall import MultipartPostHandler
 
 logger = logging.getLogger(__name__)
 
@@ -96,9 +95,9 @@ UNSUBSCRIBE_DATA = {
 }
 
 def check_encoding(value, encoding):
-    if isinstance(value, UnicodeType) and encoding != 'utf-8':
+    if encoding != 'utf-8':
         value = value.encode(encoding)
-    if not isinstance(value, UnicodeType) and encoding == 'utf-8':
+    if encoding == 'utf-8':
         value = str(value, errors='replace')
     return value
 
