@@ -42,8 +42,7 @@ Updates:
     add support for multipart encoding
     add Parameter force_multipart
 """
-import urllib
-import urllib2
+import urllib.request, urllib.parse, urllib.error
 import mimetools, mimetypes
 import os, stat
 from types import UnicodeType
@@ -53,8 +52,8 @@ from types import UnicodeType
 doseq = 1
 
 
-class MultipartPostHandler(urllib2.BaseHandler):
-    handler_order = urllib2.HTTPHandler.handler_order - 10 # needs to run first
+class MultipartPostHandler(urllib.request.BaseHandler):
+    handler_order = urllib.request.HTTPHandler.handler_order - 10 # needs to run first
 
     def __init__(self, encoding='utf-8', force_multipart=False):
         self.encoding = encoding
@@ -66,23 +65,23 @@ class MultipartPostHandler(urllib2.BaseHandler):
             v_files = []
             v_vars = []
             try:
-                 for(key, value) in data.items():
+                 for(key, value) in list(data.items()):
                      if type(value) == file:
                          v_files.append((key, value))
                      else:
                          v_vars.append((key, value))
             except TypeError:
                 systype, value, traceback = sys.exc_info()
-                raise TypeError, "not a valid non-string sequence or mapping object", traceback
+                raise TypeError("not a valid non-string sequence or mapping object").with_traceback(traceback)
 
             if len(v_files) == 0 and not self.force_multipart:
-                data = urllib.urlencode(v_vars, doseq)
+                data = urllib.parse.urlencode(v_vars, doseq)
             else:
                 boundary, data = self.multipart_encode(v_vars, v_files)
                 contenttype = 'multipart/form-data; boundary=%s' % boundary
                 if(request.has_header('Content-Type')
                    and request.get_header('Content-Type').find('multipart/form-data') != 0):
-                    print "Replacing %s with %s" % (request.get_header('content-type'), 'multipart/form-data')
+                    print("Replacing %s with %s" % (request.get_header('content-type'), 'multipart/form-data'))
                 request.add_unredirected_header('Content-Type', contenttype)
 
             request.add_data(data)
@@ -91,27 +90,27 @@ class MultipartPostHandler(urllib2.BaseHandler):
     def multipart_encode(self, vars, files, boundary = None, buffer = None):
         if boundary is None:
             boundary = mimetools.choose_boundary()
-            boundary_str = u'--%s\r\n' % boundary
+            boundary_str = '--%s\r\n' % boundary
         if buffer is None:
-            buffer = u''
+            buffer = ''
         for(key, value) in vars:
-            key = unicode(key, self.encoding, 'replace')
-            value = unicode(str(value), self.encoding, 'replace')
+            key = str(key, self.encoding, 'replace')
+            value = str(str(value), self.encoding, 'replace')
             buffer += boundary_str
-            buffer += u'Content-Disposition: form-data; name="%s"' % key
-            buffer += u'\r\n\r\n' + value + u'\r\n'
+            buffer += 'Content-Disposition: form-data; name="%s"' % key
+            buffer += '\r\n\r\n' + value + '\r\n'
         for(key, fd) in files:
             file_size = os.fstat(fd.fileno())[stat.ST_SIZE]
             filename = os.path.basename(fd.name)
-            contenttype = mimetypes.guess_type(filename)[0] or u'application/octet-stream'
-            key = unicode(key, self.encoding, 'replace')
-            filename = unicode(filename, self.encoding, 'replace')
+            contenttype = mimetypes.guess_type(filename)[0] or 'application/octet-stream'
+            key = str(key, self.encoding, 'replace')
+            filename = str(filename, self.encoding, 'replace')
             buffer += boundary_str
-            buffer += u'Content-Disposition: form-data; name="%s"; filename="%s"\r\n' % (key, filename)
-            buffer += u'Content-Type: %s\r\n' % contenttype
-            buffer += u'Content-Length: %s\r\n' % file_size
+            buffer += 'Content-Disposition: form-data; name="%s"; filename="%s"\r\n' % (key, filename)
+            buffer += 'Content-Type: %s\r\n' % contenttype
+            buffer += 'Content-Length: %s\r\n' % file_size
             fd.seek(0)
-            buffer += u'\r\n' + fd.read() + u'\r\n'
+            buffer += '\r\n' + fd.read() + '\r\n'
         buffer += boundary_str
         if self.encoding != 'utf-8':
             buffer = buffer.encode(self.encoding)
@@ -125,7 +124,7 @@ def main():
     import tempfile, sys
 
     validatorURL = "http://validator.w3.org/check"
-    opener = urllib2.build_opener(MultipartPostHandler)
+    opener = urllib.request.build_opener(MultipartPostHandler)
 
     def validateFile(url):
         temp = tempfile.mkstemp(suffix=".html")
@@ -133,7 +132,7 @@ def main():
         params = { "ss" : "0",            # show source
                    "doctype" : "Inline",
                    "uploaded_file" : open(temp[1], "rb") }
-        print opener.open(validatorURL, params).read()
+        print(opener.open(validatorURL, params).read())
         os.remove(temp[1])
 
     if len(sys.argv[1:]) > 0:
