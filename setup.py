@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name = 'djangoplicity-mailman',
-    version = '0.5.0',
+    version = '0.5.1',
     packages = ['django_mailman',],
     platforms = ['any'],
     license = 'GNU LGPL v2.1',
